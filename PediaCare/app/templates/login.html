@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | PediaCare</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f6fb;
+            color: #243447;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: white;
+            width: 350px;
+            max-width: calc(100% - 48px);
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px #20344a15;
+        }
+        h1 { color: #167d9a; margin-bottom: 6px; }
+        .subtitle { color: #667788; margin-bottom: 24px; }
+        label { display: block; margin: 14px 0 6px; }
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ccd6e0;
+            border-radius: 7px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 22px;
+            background: #167d9a;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+        a { color: #167d9a; }
+        .message { padding: 10px; background: #fff3cd; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1>PediaCare</h1>
+        <p class="subtitle">Pediatric Hospital Management System</p>
+
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+
+        <h2>Welcome back</h2>
+        <form method="POST" action="{{ url_for('auth.login') }}">
+            <label for="email">Email address</label>
+            <input id="email" type="email" name="email"
+                   autocomplete="email" required>
+
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password"
+                   autocomplete="current-password" required>
+
+            <button type="submit">Log in</button>
+        </form>
+
+        <p>New to PediaCare?
+            <a href="{{ url_for('auth.register') }}">Create an account</a>
+        </p>
+    </main>
+</body>
+</html>
