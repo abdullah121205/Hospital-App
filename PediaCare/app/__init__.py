@@ -35,11 +35,7 @@ def create_app():
 
     @app.route("/")
     def home():
-        return {
-            "application": "PediaCare",
-            "message": "Pediatric Hospital Management System API",
-            "status": "running",
-            "database": "configured"
-        }
+        from flask import redirect, url_for
+        return redirect(url_for("auth.login"))
 
     return app
