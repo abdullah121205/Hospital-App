@@ -1,56 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patients | PediaCare</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f7fb; padding: 25px; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 22px; border-radius: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #ddd; }
-        th { background: #eaf2f8; }
-        a { color: #176b87; }
-        .table-wrap { overflow-x: auto; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1>Registered Patients</h1>
-    <p><a href="{{ url_for('patients.add_patient') }}">+ Register New Patient</a></p>
+{% extends "base.html" %}
 
-    <div class="table-wrap">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Child's Name</th>
-                    <th>Date of Birth</th>
-                    <th>Sex</th>
-                    <th>Parent/Guardian</th>
-                    <th>Phone</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for patient in patients %}
-                <tr>
-                    <td>{{ patient.id }}</td>
-                    <td>{{ patient.full_name }}</td>
-                    <td>{{ patient.date_of_birth }}</td>
-                    <td>{{ patient.sex }}</td>
-                    <td>{{ patient.guardian_name }}</td>
-                    <td>{{ patient.guardian_phone }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="6">No patients registered yet.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+{% block title %}Patients | PediaCare{% endblock %}
 
-    <p><a href="{{ url_for('auth.dashboard') }}">Back to Dashboard</a></p>
+{% block content %}
+<h2>Patient Management</h2>
+<p>View and search registered patient records.</p>
+
+<p>
+    <a class="button" href="{{ url_for('patients.add_patient') }}">
+        + Register New Patient
+    </a>
+</p>
+
+<form method="GET" action="{{ url_for('patients.list_patients') }}">
+    <label for="q">Search by patient name or ID</label>
+    <input type="text" id="q" name="q"
+           placeholder="Enter patient name or ID"
+           value="{{ search_query|default('') }}">
+    <button type="submit">Search</button>
+    <a href="{{ url_for('patients.list_patients') }}">Clear</a>
+</form>
+
+{% if patients %}
+<div style="overflow-x: auto;">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Patient Name</th>
+                <th>Date of Birth</th>
+                <th>Sex</th>
+                <th>Parent/Guardian</th>
+                <th>Contact Number</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patients %}
+            <tr>
+                <td>{{ patient.id }}</td>
+                <td>{{ patient.full_name }}</td>
+                <td>{{ patient.date_of_birth or 'Not provided' }}</td>
+                <td>{{ patient.sex or 'Not provided' }}</td>
+                <td>{{ patient.guardian_name or 'Not provided' }}</td>
+                <td>{{ patient.guardian_phone or 'Not provided' }}</td>
+                <td>{{ patient.address or 'Not provided' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
-</body>
-</html>
+{% else %}
+<p>No patients found. Register a new patient to get started.</p>
+{% endif %}
+
+{% endblock %}
